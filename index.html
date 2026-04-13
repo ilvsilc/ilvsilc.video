@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>生活輔導宣導單張｜宜蘭高商教官室</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', '微軟正黑體', 'Noto Sans TC', 'PingFang TC', system-ui, -apple-system, sans-serif;
+    background: #fffaf3;  /* 暖米紙張感 */
+    color: #2e241f;
+    line-height: 1.5;
+  }
+
+  /* 頁首 — 參照相片中的紅色主視覺 */
+  .header {
+    background: #b33a2c;  /* 穩重磚紅 */
+    background-image: linear-gradient(115deg, #a03224 0%, #c24938 100%);
+    color: #fff9ea;
+    padding: 1.3rem 1.8rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    border-bottom: 3px solid #f5cf9b;
+  }
+  .header small {
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: rgba(255,245,215,0.2);
+    padding: 0.2rem 0.8rem;
+    border-radius: 30px;
+    margin-left: 14px;
+    letter-spacing: 0.5px;
+  }
+
+  /* 主要容器 */
+  .container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 2.2rem 1.8rem;
+  }
+
+  /* 分類區塊 — 呼應傳統單張的分隔線 */
+  .section {
+    margin-bottom: 3.2rem;
+  }
+  .section-title {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 1.8rem;
+    font-weight: 750;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 3px solid #e7cfab;
+    color: #8b3c2c;
+  }
+  .section-icon {
+    font-size: 1.9rem;
+    margin-right: 4px;
+  }
+  .section-title .badge {
+    background: #f2e3cf;
+    padding: 0.2rem 0.9rem;
+    border-radius: 40px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #b45133;
+    margin-left: 6px;
+  }
+
+  /* 影片網格 */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  /* 卡片 — 柔和陰影，邊角溫潤 */
+  .video-card {
+    background: #ffffff;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+    transition: all 0.25s ease;
+    cursor: pointer;
+    border: 1px solid #f3e5d2;
+  }
+  .video-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 28px -10px rgba(0, 0, 0, 0.15);
+    border-color: #dcb68a;
+  }
+
+  /* 縮圖容器 */
+  .video-thumb {
+    position: relative;
+    background: #2c241e;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+  .video-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    display: block;
+  }
+  .video-card:hover .video-thumb img {
+    transform: scale(1.02);
+  }
+
+  /* 播放浮層 — 增加圓形紅按鈕意象 */
+  .play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.28);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .video-card:hover .play-overlay {
+    opacity: 1;
+  }
+  .play-btn {
+    background: #b33a2c;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #fff1cf;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  }
+  .video-card:hover .play-btn {
+    transform: scale(1.06);
+    background: #9e2e20;
+    color: #ffefb9;
+  }
+
+  /* 影片標題 — 仿單張手寫感 */
+  .video-title {
+    padding: 1rem 1rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    color: #38281f;
+    background: #fefcf7;
+    border-top: 1px solid #f5e8d6;
+    letter-spacing: 0.3px;
+  }
+
+  /* 內嵌播放器 */
+  .video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    background: #000000;
+  }
+  .video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* 圖片 fallback 區 */
+  .error-thumb {
+    background: #d6b08c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #4a2a1c;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  /* 響應式調整 */
+  @media (max-width: 680px) {
+    .container {
+      padding: 1.2rem;
+    }
+    .section-title {
+      font-size: 1.5rem;
+    }
+    .video-grid {
+      gap: 1.2rem;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+    .header {
+      font-size: 1.25rem;
+      padding: 0.9rem 1rem;
+    }
+    .header small {
+      display: inline-block;
+      margin-left: 6px;
+      font-size: 0.7rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .play-btn {
+      width: 48px;
+      height: 48px;
+      font-size: 20px;
+    }
+    .video-title {
+      font-size: 0.85rem;
+    }
+  }
+
+  /* 回到頂端按鈕 */
+  .back2top {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    background: #b33a2c;
+    color: white;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: 0.2s;
+    z-index: 99;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    font-size: 1.4rem;
+  }
+  .back2top:hover {
+    opacity: 1;
+    background: #82281c;
+    transform: translateY(-3px);
+  }
+
+  /* 載入動畫柔和 */
+  .loading-tip {
+    text-align: center;
+    padding: 2.5rem;
+    font-size: 1.1rem;
+    color: #b37b5a;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  📖 生活輔導宣導單張 
+  <small>交通安全·反詐法治·健康生活</small>
+</div>
+
+<div class="container" id="content">
+  <div class="loading-tip">🎬 載入影音資源，請稍後...</div>
+</div>
+
+<a href="#" class="back2top" id="back2topBtn" aria-label="回到頂端">↑</a>
+
+<script>
+  // --------------------------------------------------------------
+  // 影片資料庫 (完全依照使用者提供清單 + 幻彩仙果)
+  // 分類及標題參照原單張風格
+  // --------------------------------------------------------------
+  const videoLibrary = {
+    "🚸 交通與安全": {
+      icon: "🚦",
+      items: [
+        { id: "E0IhcDUO63g", title: "螢幕之外" },
+        { id: "pHeZdX78pDg", title: "快一秒可能慢一輩子" },
+        { id: "4hKh_dmYtVM", title: "低頭一秒生死一瞬 宜商" },
+        { id: "fzKMcy3PMmM", title: "慢吞吞的斑馬線之旅" }
+      ]
+    },
+    "⚖️ 反詐騙 / 法治": {
+      icon: "⚖️",
+      items: [
+        { id: "510BssRNaXk", title: "是幫忙還是害自己" },
+        { id: "J-NZVXvLy-0", title: "青春的代價" },
+        { id: "cnWQWhI5Sfg", title: "114年宜蘭高商國家防災日" },
+        { id: "vuubuBvmjfI", title: "拒絕兒少性剝削 不該點擊的連結" }
+      ]
+    },
+    "🩺 健康 / 生活": {
+      icon: "❤️",
+      items: [
+        { id: "CyaAepklmi8", title: "如果可以重來" },
+        { id: "3FmHFxV0vzk", title: "一口變喪屍" },
+        { id: "yrexDKU9QjA", title: "城市裡的一束光 宜商" },
+        { id: "aLKRxYdK0Tw", title: "宜商 危險的短暫自由" },
+        { id: "YkLkCuAVYUM", title: "幻彩仙果的陷阱" }
+      ]
+    }
+  };
+
+  // 獲取 YouTube 縮圖 (支援 fallback)
+  function getThumbnailUrl(videoId) {
+    return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+  }
+
+  // 建立單張影片卡片 (保留良好互動與播放轉換)
+  function createVideoCard(video, categoryTitle) {
+    const card = document.createElement('div');
+    card.className = 'video-card';
+
+    // 縮圖外框
+    const thumbContainer = document.createElement('div');
+    thumbContainer.className = 'video-thumb';
+
+    const img = document.createElement('img');
+    img.src = getThumbnailUrl(video.id);
+    img.alt = video.title;
+    img.loading = 'lazy';
+
+    // 縮圖載入失敗 -> 改用 hqdefault
+    img.onerror = function() {
+      if (this.src !== `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`) {
+        this.src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
+      } else {
+        this.style.display = 'none';
+        const errMsg = document.createElement('div');
+        errMsg.className = 'error-thumb';
+        errMsg.innerText = '📸 預覽圖讀取異常';
+        thumbContainer.appendChild(errMsg);
+      }
+    };
+
+    // 播放按鈕浮層
+    const overlay = document.createElement('div');
+    overlay.className = 'play-overlay';
+    const playButton = document.createElement('div');
+    playButton.className = 'play-btn';
+    playButton.innerHTML = '▶';
+    overlay.appendChild(playButton);
+
+    thumbContainer.appendChild(img);
+    thumbContainer.appendChild(overlay);
+
+    // 標題區
+    const titleDiv = document.createElement('div');
+    titleDiv.className = 'video-title';
+    titleDiv.innerText = video.title;
+
+    card.appendChild(thumbContainer);
+    card.appendChild(titleDiv);
+
+    // 點擊播放邏輯（避免重複建立 iframe）
+    let isVideoLoaded = false;
+
+    card.addEventListener('click', function(e) {
+      if (isVideoLoaded) return;
+      // 檢查是否已存在 iframe
+      if (thumbContainer.querySelector('iframe')) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'video-wrapper';
+      const iframe = document.createElement('iframe');
+      // autoplay=1 立即播放，提升體驗
+      iframe.src = `https://www.youtube.com/embed/${video.id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+      iframe.setAttribute('allowfullscreen', 'true');
+      iframe.title = video.title;
+
+      wrapper.appendChild(iframe);
+      // 清除原有內容（img, overlay 等）
+      while (thumbContainer.firstChild) {
+        thumbContainer.removeChild(thumbContainer.firstChild);
+      }
+      thumbContainer.appendChild(wrapper);
+      isVideoLoaded = true;
+      card.style.cursor = 'default';
+    });
+
+    return card;
+  }
+
+  // 渲染所有分類區塊
+  function renderAllSections() {
+    const mainContainer = document.getElementById('content');
+    if (!mainContainer) return;
+    mainContainer.innerHTML = '';
+
+    for (const [catName, catData] of Object.entries(videoLibrary)) {
+      const sectionBlock = document.createElement('div');
+      sectionBlock.className = 'section';
+
+      // 分類標題（仿單張大標）
+      const titleRow = document.createElement('div');
+      titleRow.className = 'section-title';
+      
+      const iconSpan = document.createElement('span');
+      iconSpan.className = 'section-icon';
+      iconSpan.innerText = catData.icon || '📌';
+      
+      const catText = document.createElement('span');
+      catText.innerText = catName;
+      
+      const countSpan = document.createElement('span');
+      countSpan.className = 'badge';
+      countSpan.innerText = `${catData.items.length} 部影片`;
+      
+      titleRow.appendChild(iconSpan);
+      titleRow.appendChild(catText);
+      titleRow.appendChild(countSpan);
+      
+      // 網格容器
+      const grid = document.createElement('div');
+      grid.className = 'video-grid';
+      
+      catData.items.forEach(video => {
+        const card = createVideoCard(video, catName);
+        grid.appendChild(card);
+      });
+      
+      sectionBlock.appendChild(titleRow);
+      sectionBlock.appendChild(grid);
+      mainContainer.appendChild(sectionBlock);
+    }
+    
+    // 若無任何資料則顯示提示
+    if (Object.keys(videoLibrary).length === 0) {
+      mainContainer.innerHTML = '<div style="text-align:center; padding:3rem;">📭 目前尚無宣導影片，敬請期待</div>';
+    }
+  }
+
+  // 回到頂端按鈕
+  const topBtn = document.getElementById('back2topBtn');
+  if (topBtn) {
+    topBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // 執行渲染
+  renderAllSections();
+</script>
+</body>
+</html>
