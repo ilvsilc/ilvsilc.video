@@ -5,79 +5,61 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>生活輔導宣導單張｜學生生活輔導宣導影片｜宜蘭高商教官室</title>
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
+  * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    margin: 0;
-    font-family: "微軟正黑體", "Segoe UI", "Noto Sans TC", Arial, sans-serif;
+    font-family: "微軟正黑體", "Segoe UI", Arial, sans-serif;
     background: #f5f5f5;
     color: #2c3e2f;
-    line-height: 1.5;
   }
-
-  /* 頂部標題 — 使用 #d83434 主色 */
   .header {
     background: #d83434;
     color: white;
     padding: 14px 24px;
     font-size: 1.4rem;
     font-weight: bold;
-    letter-spacing: 1px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
     z-index: 20;
   }
   .header small {
     font-size: 0.8rem;
-    font-weight: normal;
     background: rgba(255,255,255,0.2);
     padding: 0.2rem 0.7rem;
     border-radius: 20px;
     margin-left: 12px;
   }
-
   .container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 20px 24px;
   }
-
   .section-title {
     font-size: 1.5rem;
     font-weight: bold;
     margin: 30px 0 15px;
     border-left: 6px solid #d83434;
     padding-left: 14px;
-    color: #2c3e2f;
   }
-
   .video-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 24px;
   }
-
   .video-card {
     background: white;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s;
     cursor: pointer;
   }
   .video-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
   }
-
   .video-thumb {
     position: relative;
-    background: #1a1a1a;
+    background: #000;
     aspect-ratio: 16 / 9;
     overflow: hidden;
   }
@@ -87,7 +69,6 @@
     object-fit: cover;
     display: block;
   }
-
   .play-btn {
     position: absolute;
     top: 50%;
@@ -102,14 +83,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    transition: 0.2s;
   }
   .video-card:hover .play-btn {
     background: #d83434;
     transform: translate(-50%, -50%) scale(1.05);
   }
-
   .video-wrapper {
     position: relative;
     padding-bottom: 56.25%;
@@ -121,7 +100,6 @@
     height: 100%;
     border: 0;
   }
-
   .video-title {
     padding: 12px;
     font-size: 0.9rem;
@@ -131,7 +109,6 @@
     background: white;
     border-top: 1px solid #f0f0f0;
   }
-
   .back2top {
     position: fixed;
     bottom: 20px;
@@ -146,39 +123,30 @@
     justify-content: center;
     text-decoration: none;
     opacity: 0.8;
-    transition: 0.2s;
     z-index: 99;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   }
   .back2top:hover {
     opacity: 1;
     transform: translateY(-3px);
-    background: #b02a2a;
   }
-
   @media (max-width: 680px) {
     .container { padding: 12px 16px; }
     .section-title { font-size: 1.3rem; }
-    .video-grid { gap: 16px; }
     .header { font-size: 1.1rem; padding: 12px 16px; }
-    .header small { display: inline-block; margin-top: 4px; font-size: 0.7rem; }
     .play-btn { width: 48px; height: 48px; font-size: 24px; }
   }
 </style>
 </head>
 <body>
-
 <div class="header">
   📖 生活輔導宣導單張 - 學生生活輔導宣導影片
   <small>交通安全·反詐法治·健康生活</small>
 </div>
-
 <div class="container" id="content"></div>
-
 <a href="#" class="back2top" id="back2topBtn">↑</a>
 
 <script>
-  // 影片資料庫 (與您提供的完全一致)
+  // 影片資料庫（完全與您提供的相同）
   const videoData = {
     "🚸 交通與安全": [
       { id: "E0IhcDUO63g", title: "螢幕之外" },
@@ -203,19 +171,11 @@
 
   const container = document.getElementById("content");
 
-  // 獲取可用的縮圖網址 (自動降級)
-  function getThumbnailUrl(videoId, callback) {
-    const maxResUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-    const hqUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-    
-    // 先嘗試高畫質，若失敗則改用標準畫質
-    const imgTest = new Image();
-    imgTest.onload = () => callback(maxResUrl);
-    imgTest.onerror = () => callback(hqUrl);
-    imgTest.src = maxResUrl;
+  // 直接使用 YouTube 官方保證存在的 hqdefault 縮圖（永不破圖）
+  function getYouTubeThumbnail(videoId) {
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
   }
 
-  // 建立單一影片卡片
   function createVideoCard(video) {
     const card = document.createElement("div");
     card.className = "video-card";
@@ -223,20 +183,19 @@
     const thumb = document.createElement("div");
     thumb.className = "video-thumb";
 
-    // 暫時顯示一個淺色佔位背景
-    const tempImg = document.createElement("img");
-    tempImg.style.backgroundColor = "#ddd";
-    tempImg.alt = video.title;
-    thumb.appendChild(tempImg);
-
-    // 非同步取得正確縮圖
-    getThumbnailUrl(video.id, (finalUrl) => {
-      tempImg.src = finalUrl;
-    });
+    const img = document.createElement("img");
+    img.src = getYouTubeThumbnail(video.id);
+    img.alt = video.title;
+    // 極少數情況 hqdefault 也失效（幾乎不可能），加上最終 fallback
+    img.onerror = function() {
+      this.src = "https://placehold.co/320x180/e0e0e0/666?text=No+Preview";
+    };
 
     const playBtn = document.createElement("div");
     playBtn.className = "play-btn";
     playBtn.innerHTML = "▶";
+
+    thumb.appendChild(img);
     thumb.appendChild(playBtn);
 
     const titleDiv = document.createElement("div");
@@ -260,10 +219,7 @@
       iframe.setAttribute("allowfullscreen", "true");
 
       wrapper.appendChild(iframe);
-      // 清除原有內容 (圖片與播放按鈕)
-      while (thumb.firstChild) {
-        thumb.removeChild(thumb.firstChild);
-      }
+      while (thumb.firstChild) thumb.removeChild(thumb.firstChild);
       thumb.appendChild(wrapper);
       isPlaying = true;
       card.style.cursor = "default";
@@ -272,7 +228,6 @@
     return card;
   }
 
-  // 渲染所有分類
   function render() {
     container.innerHTML = "";
     for (const [category, videos] of Object.entries(videoData)) {
@@ -296,7 +251,6 @@
 
   render();
 
-  // 回到頂端
   const backBtn = document.getElementById("back2topBtn");
   backBtn.addEventListener("click", (e) => {
     e.preventDefault();
